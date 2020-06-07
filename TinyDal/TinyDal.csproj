@@ -2,6 +2,9 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <RepositoryUrl>https://github.com/mingditts/TinyDal</RepositoryUrl>
+    <Description>TinyDal is a lightweight and minimal abstraction over ORMs. It provides a convenient abstraction over it.</Description>
   </PropertyGroup>
 
   <ItemGroup>
