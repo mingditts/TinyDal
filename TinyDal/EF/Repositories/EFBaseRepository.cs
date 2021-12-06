@@ -101,6 +101,11 @@ namespace TinyDal.EF.Repositories
 			return this._dbSet.FromSqlRaw<T>(statement, parameters).SingleOrDefaultAsync();
 		}
 
+		protected List<T> QueryRawList(string statement, params object[] parameters)
+		{
+			return this._dbSet.FromSqlRaw<T>(statement, parameters).ToList();
+		}
+
 		protected Task<List<T>> QueryRawListAsync(string statement, params object[] parameters)
 		{
 			return this._dbSet.FromSqlRaw<T>(statement, parameters).ToListAsync();
