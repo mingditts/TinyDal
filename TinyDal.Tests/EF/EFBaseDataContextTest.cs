@@ -92,7 +92,13 @@ namespace TinyDal.Tests.EF
 			{
 				base.ExecuteRaw(sql);
 			}
+
+			public MockEntity GetByName(string name)
+			{
+				return base.QueryRawSingle($"SELECT TOP 1 * FROM MockEntities WITH (UPDLOCK, READPAST) WHERE Name = '{name}'");
+			}
 		}
+
 		private class MockDeletableEntityRepository : EFBaseRepository<MockDeletableEntity>
 		{
 			public MockDeletableEntityRepository(long? tenantId, DbContext context) : base(tenantId, context)
@@ -130,7 +136,7 @@ namespace TinyDal.Tests.EF
 			if ("sqlserver".Equals(databaseEngine))
 			{
 				var optionsBuilder = new DbContextOptionsBuilder<MockDataContext>();
-				optionsBuilder.UseSqlServer(@"Server=(localdb)\dev;Database=TinyDalTestDb;Integrated security=True;");
+				optionsBuilder.UseSqlServer(@"Server=.\SQLEXPRESS;Database=TinyDalTestDb;Integrated security=True;");
 				return new MockDataContext(optionsBuilder.Options, tenantId, isolationLevel);
 			}
 			else
@@ -694,6 +700,30 @@ namespace TinyDal.Tests.EF
 				Assert.IsNull(mockEntity, "Entity is not null.");
 
 				dataContext.Rollback();
+			}
+		}
+
+		[Test]
+		[Description("It tests a simple sql raw query.")]
+		public void GetByName_ItReturnsEntity([Values("sqlserver")]string databaseEngine)
+		{
+			var guid = Guid.NewGuid();
+
+			string entityName = "Name_" + guid.ToString();
+
+			using (var dataContext = this.BuildDataContext(databaseEngine))
+			{
+				dataContext.MockEntityRepository.InsertRaw($"insert into MockEntities (Name) values ('{entityName}')");
+
+				MockEntity mockEntity = dataContext.MockEntityRepository.GetByName(entityName);
+
+				Assert.IsNotNull(mockEntity, "Entity is null.");
+
+				dataContext.Rollback();
+
+				mockEntity = dataContext.MockEntityRepository.GetByName(entityName);
+
+				Assert.IsNull(mockEntity, "Entity is not null.");
 			}
 		}
 	}

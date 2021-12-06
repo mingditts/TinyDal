@@ -81,24 +81,29 @@ namespace TinyDal.EF.Repositories
 
 		#endregion
 
-		/// <summary>
-		/// Execute raw sql
-		/// </summary>
-		/// <param name="statement"></param>
-		/// <param name="parameters"></param>
-		protected void ExecuteRaw(string statement, params object[] parameters)
+		protected int ExecuteRaw(string statement, params object[] parameters)
 		{
-			this._context.Database.ExecuteSqlRaw(statement, parameters);
+			return this._context.Database.ExecuteSqlRaw(statement, parameters);
 		}
 
-		/// <summary>
-		/// Execute raw sql async
-		/// </summary>
-		/// <param name="statement"></param>
-		/// <param name="parameters"></param>
-		protected void ExecuteRawAsync(string statement, params object[] parameters)
+		protected Task<int> ExecuteRawAsync(string statement, params object[] parameters)
 		{
-			this._context.Database.ExecuteSqlRawAsync(statement, parameters);
+			return this._context.Database.ExecuteSqlRawAsync(statement, parameters);
+		}
+
+		protected T QueryRawSingle(string statement, params object[] parameters)
+		{
+			return this._dbSet.FromSqlRaw<T>(statement, parameters).SingleOrDefault();
+		}
+
+		protected Task<T> QueryRawSingleAsync(string statement, params object[] parameters)
+		{
+			return this._dbSet.FromSqlRaw<T>(statement, parameters).SingleOrDefaultAsync();
+		}
+
+		protected Task<List<T>> QueryRawListAsync(string statement, params object[] parameters)
+		{
+			return this._dbSet.FromSqlRaw<T>(statement, parameters).ToListAsync();
 		}
 
 		public T FindOneBy(Func<T, bool> predicate, bool readOnly = false, bool preventDeletionManagement = false)

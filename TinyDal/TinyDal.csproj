@@ -6,6 +6,7 @@
     <RepositoryUrl>https://github.com/mingditts/TinyDal</RepositoryUrl>
     <Description>TinyDal is a lightweight and minimal abstraction over ORMs. It provides a convenient abstraction over it.</Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <Version>1.0.1</Version>
   </PropertyGroup>
 
   <ItemGroup>
