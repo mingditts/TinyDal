@@ -136,7 +136,7 @@ namespace TinyDal.Tests.EF
 			if ("sqlserver".Equals(databaseEngine))
 			{
 				var optionsBuilder = new DbContextOptionsBuilder<MockDataContext>();
-				optionsBuilder.UseSqlServer(@"Server=.\SQLEXPRESS;Database=TinyDalTestDb;Integrated security=True;");
+				optionsBuilder.UseSqlServer(@"Server=.\SQLEXPRESS;Database=TinyDalTestDb;Integrated security=True;TrustServerCertificate=True");
 				return new MockDataContext(optionsBuilder.Options, tenantId, isolationLevel);
 			}
 			else
@@ -165,7 +165,7 @@ namespace TinyDal.Tests.EF
 		{
 			if (Directory.Exists(this.GetAppDataFolderPath()))
 			{
-				Directory.Delete(this.GetAppDataFolderPath(), true);
+				//Directory.Delete(this.GetAppDataFolderPath(), true);
 			}
 		}
 
